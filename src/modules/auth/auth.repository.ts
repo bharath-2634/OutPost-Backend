@@ -91,7 +91,7 @@ export class AuthRepository {
   /**
    * Find active refresh session by SHA-256 token hash
    */
-  public async findRefreshSessionByHash(tokenHash: string): Promise<RefreshSession | null> {
+  public async findRefreshSessionByHash(tokenHash: string): Promise<(RefreshSession & { user: User }) | null> {
     return prisma.refreshSession.findUnique({
       where: { tokenHash },
       include: { user: true },

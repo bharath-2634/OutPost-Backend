@@ -17,7 +17,7 @@ export class JwtService {
 
     return jwt.sign(payload, JWT_CONFIG.privateKey, {
       algorithm: JWT_CONFIG.algorithm,
-      expiresIn: JWT_CONFIG.accessTokenExpiresIn,
+      expiresIn: JWT_CONFIG.accessTokenExpiresIn as any,
     });
   }
 

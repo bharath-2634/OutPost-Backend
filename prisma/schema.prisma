@@ -23,6 +23,17 @@ enum JobStatus {
   RESCHEDULED
 }
 
+enum SenderProvider {
+  ETHEREAL
+}
+
+enum SenderStatus {
+  PENDING
+  ACTIVE
+  FAILED
+  DISABLED
+}
+
 model User {
   id            String   @id @default(uuid())
   googleSubject String?  @unique @map("google_subject")
@@ -35,6 +46,7 @@ model User {
 
   slackIntegration SlackIntegration?
   campaigns        EmailCampaign[]
+  senderAccounts   SenderAccount[]
   refreshSessions  RefreshSession[]
 
   @@map("users")
@@ -70,10 +82,36 @@ model SlackIntegration {
   @@map("slack_integrations")
 }
 
+model SenderAccount {
+  id                    String         @id @default(uuid())
+  userId                String         @map("user_id")
+  user                  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  displayName           String         @map("display_name")
+  email                 String?
+  avatarUrl             String?        @map("avatar_url")
+  provider              SenderProvider @default(ETHEREAL)
+  smtpHost              String?        @map("smtp_host")
+  smtpPort              Int?           @map("smtp_port")
+  smtpUsername          String?        @map("smtp_username")
+  smtpPasswordEncrypted String?        @map("smtp_password_encrypted")
+  smtpSecure            Boolean        @default(false) @map("smtp_secure")
+  status                SenderStatus   @default(PENDING)
+  createdAt             DateTime       @default(now()) @map("created_at")
+  updatedAt             DateTime       @updatedAt @map("updated_at")
+
+  userCampaigns         EmailCampaign[]
+
+  @@index([userId])
+  @@index([userId, status])
+  @@map("sender_accounts")
+}
+
 model EmailCampaign {
   id                String         @id @default(uuid())
   userId            String         @map("user_id")
   user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  senderId          String?        @map("sender_id")
+  sender            SenderAccount? @relation(fields: [senderId], references: [id], onDelete: SetNull)
   title             String
   subject           String
   body              String         @db.Text

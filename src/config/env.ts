@@ -21,6 +21,8 @@ const envSchema = z.object({
   MAX_EMAILS_PER_HOUR: z.string().default('200'),
   MIN_DELAY_BETWEEN_SENDS_MS: z.string().default('2000'),
   WORKER_CONCURRENCY: z.string().default('5'),
+  SENDER_WORKER_CONCURRENCY: z.string().default('5'),
+  ENCRYPTION_SECRET: z.string().default('c374668b4d89a29589d38c117865239e0f11904a081515f4e1951f2bdf164101'),
 });
 
 export const env = envSchema.parse(process.env);

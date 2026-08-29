@@ -45,13 +45,19 @@ app.get('/health', (req: Request, res: Response) => {
   });
 });
 
+import senderRoutes from './modules/sender/sender.routes';
+
 // Auth Module Routes
 app.use('/api/auth', authRoutes);
 
+// Sender Management Module Routes
+app.use('/api/v1/senders', senderRoutes);
+
 // Global Error Handler
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error('[Global Error]', err);
-  res.status(500).json({
+  const status = err.statusCode || err.status || 500;
+  res.status(status).json({
     error: err.message || 'Internal Server Error',
   });
 });
