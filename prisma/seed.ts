@@ -12,12 +12,12 @@ async function main() {
     create: {
       email: 'demo@reachinbox.ai',
       name: 'ReachInbox Demo User',
-      avatar: 'https://lh3.googleusercontent.com/a/default-avatar',
-      googleId: 'google-demo-id-12345',
+      avatarUrl: 'https://lh3.googleusercontent.com/a/default-avatar',
+      googleSubject: 'google-demo-sub-12345',
     },
   });
 
-  console.log('Demo user created:', user.email);
+  console.log('✅ Demo user created:', user.email);
 
   // Create a demo campaign
   const campaign = await prisma.emailCampaign.create({
@@ -48,7 +48,7 @@ async function main() {
             recipientEmail: 'lead2@example.com',
             subject: 'Transforming cold email outreach with AI',
             body: 'Hi Lead 2, ReachInbox springs into action to help you find and engage high-intent leads.',
-            scheduledFor: new Date(Date.now() + 60000), // scheduled for 1 min later
+            scheduledFor: new Date(Date.now() + 60000),
             status: JobStatus.PENDING,
           },
         ],
